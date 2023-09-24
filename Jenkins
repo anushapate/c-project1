@@ -1,0 +1,36 @@
+pipeline{
+    agent any
+    stages{
+        stage("code checkout"){
+            steps{
+                git url: "https://github.com/akshu20791/DevOpsClassCodes"
+            }
+        }
+        stage("code compile"){
+            steps{
+                sh 'mvn compile'
+            }
+        }
+        stage("echoing hello world"){
+            steps{
+                sh 'echo hello world'
+            }	
+        }
+        stage("code testing"){
+            steps{
+                sh 'mvn test'
+            }
+        }
+        stage("code qa"){
+            steps{
+                sh 'mvn pmd:pmd'
+                recordIssues(tools: [pmdParser()])
+            }
+        }
+        stage("package"){
+            steps{
+                sh 'mvn package'
+            }
+        }
+    }
+}
